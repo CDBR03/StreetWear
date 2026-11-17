@@ -1,0 +1,209 @@
+/* =========================================================
+   LAYOUT — a "moldura" do site: barra de progresso, cortina,
+   cabeçalho, rodapé, sacola lateral, toast e cursor.
+   ========================================================= */
+
+/* A <div data-site-header> é só um "ponto de montagem" do JS.
+   display: contents faz ela "sumir" do layout, assim o cabeçalho
+   sticky consegue grudar no topo durante a página inteira. */
+[data-site-header] { display: contents; }
+
+/* ---------- Barra de progresso de rolagem ---------- */
+.scroll-progress {
+  position: fixed; z-index: 60; top: 0; left: 0;
+  width: 100%; height: 4px;
+  background: var(--blue);
+  transform: scaleX(var(--progress, 0));
+  transform-origin: left;
+}
+
+/* ---------- Cortina de abertura ---------- */
+.curtain {
+  position: fixed; z-index: 100; inset: 0;
+  display: grid; place-items: center;
+  background: var(--pink);
+  pointer-events: none;
+  animation: curtain-out .7s var(--ease-out) .5s forwards;
+}
+.curtain span {
+  font: 700 clamp(48px, 11vw, 160px)/1 var(--display);
+  letter-spacing: -.07em;
+  animation: curtain-word .6s var(--ease-out) both;
+}
+.curtain span b { color: var(--cream); }
+
+/* ---------- Faixa de aviso ---------- */
+.site-announcement {
+  display: flex; min-height: 38px; align-items: center; justify-content: center; gap: 10px;
+  padding: 6px 16px;
+  background: var(--ink); color: var(--cream);
+  font-size: 13px; text-align: center;
+}
+.site-announcement strong { color: var(--pink); letter-spacing: .08em; }
+.site-announcement a { text-decoration: underline; text-underline-offset: 3px; }
+.live-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--pink); animation: pulse 1.4s infinite;
+}
+
+/* ---------- Cabeçalho fixo ---------- */
+.site-header {
+  position: sticky; z-index: 40; top: 0;
+  display: flex; height: var(--header-h); align-items: center; justify-content: space-between;
+  padding: 0 var(--gutter);
+  border-bottom: 2px solid var(--ink);
+  background: var(--pink);
+  transition: height .35s var(--ease-out), background .35s;
+}
+/* Quando a página rola, o ScrollFx.js adiciona .is-scrolled */
+.site-header.is-scrolled { height: 58px; background: #fc3b7fee; backdrop-filter: blur(10px); }
+
+.wordmark {
+  font: 700 28px/1 var(--display);
+  letter-spacing: -.07em;
+  white-space: nowrap;
+}
+.wordmark span { color: var(--cream); }
+.wordmark sup { margin-left: 2px; font: 700 10px var(--body); vertical-align: top; letter-spacing: 0; }
+.wordmark:hover { animation: glitch .45s steps(2) 2; }
+
+.site-nav { display: flex; align-items: center; gap: 36px; }
+.site-nav a {
+  position: relative;
+  font-size: 14px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+}
+.site-nav a::after {
+  position: absolute; right: 0; bottom: -8px; left: 0; height: 3px;
+  background: var(--ink); content: "";
+  transform: scaleX(0); transform-origin: right;
+  transition: transform .4s var(--ease-out);
+}
+.site-nav a:hover::after, .site-nav a[aria-current="page"]::after { transform: scaleX(1); transform-origin: left; }
+
+.header-actions { display: flex; align-items: center; gap: 8px; }
+.icon-button, .menu-toggle {
+  display: inline-grid; place-items: center;
+  width: 44px; height: 44px; padding: 0;
+  border: 0; background: transparent;
+}
+.icon-button svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+.icon-button:hover svg { transform: rotate(-8deg) scale(1.1); transition: transform .3s var(--ease-bounce); }
+.bag-link { position: relative; }
+.bag-count {
+  position: absolute; top: 2px; right: 0;
+  display: grid; min-width: 20px; height: 20px; place-items: center;
+  padding: 0 4px; border-radius: 10px;
+  background: var(--blue); color: var(--cream);
+  font-size: 11px; font-weight: 800;
+}
+.bag-count.is-bumping { animation: bump .6s var(--ease-bounce); }
+
+.menu-toggle { display: none; flex-direction: column; align-items: center; justify-content: center; gap: 6px; }
+.menu-toggle span { display: block; width: 26px; height: 2px; background: var(--ink); transition: transform .3s; }
+.menu-toggle[aria-expanded="true"] span:first-child { transform: translateY(4px) rotate(45deg); }
+.menu-toggle[aria-expanded="true"] span:last-child { transform: translateY(-4px) rotate(-45deg); }
+
+/* ---------- Rodapé ---------- */
+.site-footer {
+  position: relative;
+  overflow: hidden;
+  padding: 70px var(--gutter) 28px;
+  background: var(--ink); color: var(--cream);
+}
+.footer-giant {
+  margin: 0 0 40px;
+  font: 700 clamp(56px, 15vw, 240px)/.8 var(--display);
+  letter-spacing: -.08em;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--pink);
+  white-space: nowrap;
+  transition: color .5s;
+}
+.footer-giant:hover { color: var(--pink); }
+.footer-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; font-size: 13px; letter-spacing: .08em; }
+.footer-row nav { display: flex; gap: 22px; }
+.footer-row a:hover { color: var(--pink); }
+
+/* ---------- Sacola lateral ---------- */
+.cart-backdrop {
+  position: fixed; z-index: 70; inset: 0;
+  background: #17161ba6; backdrop-filter: blur(3px);
+  opacity: 0; pointer-events: none; transition: opacity .3s;
+}
+.cart-backdrop.is-open { opacity: 1; pointer-events: auto; }
+.cart-drawer {
+  position: fixed; z-index: 80; top: 0; right: 0;
+  display: flex; width: min(440px, 100%); height: 100dvh; flex-direction: column;
+  padding: 24px;
+  border-left: 2px solid var(--ink);
+  background: var(--cream);
+  transform: translateX(105%); visibility: hidden;
+  transition: transform .5s var(--ease-out), visibility 0s linear .5s;
+}
+.cart-drawer.is-open { transform: none; visibility: visible; transition: transform .5s var(--ease-out); }
+.cart-drawer-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; border-bottom: 2px solid var(--ink); }
+.cart-drawer-head h2 { margin: 0; font: 700 30px var(--display); letter-spacing: -.04em; }
+.cart-close { width: 44px; height: 44px; border: 2px solid var(--ink); background: var(--paper); font-size: 24px; transition: transform .3s var(--ease-bounce); }
+.cart-close:hover { transform: rotate(90deg); }
+.cart-items { flex: 1; overflow: auto; }
+.cart-line { display: grid; grid-template-columns: 72px 1fr auto; align-items: center; gap: 14px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.cart-line img { width: 72px; height: 88px; border: 2px solid var(--ink); object-fit: cover; }
+.cart-line h3 { margin: 0 0 4px; font: 700 16px var(--display); }
+.cart-line p { margin: 0; color: var(--muted); font-size: 14px; }
+.quantity-controls { display: flex; align-items: center; gap: 10px; margin-top: 8px; font-weight: 800; }
+.quantity-controls button, .remove-line { width: 32px; height: 32px; border: 2px solid var(--ink); background: var(--paper); }
+.quantity-controls button:hover, .remove-line:hover { background: var(--pink); }
+.cart-total { display: flex; justify-content: space-between; padding-top: 16px; border-top: 2px solid var(--ink); font: 700 22px var(--display); }
+.cart-message, .empty-cart { color: var(--muted); font-size: 14px; }
+.empty-cart { padding: 40px 0; text-align: center; font-size: 16px; }
+
+/* ---------- Toast (aviso rápido) ---------- */
+.toast {
+  position: fixed; z-index: 85; bottom: 24px; left: 50%;
+  max-width: calc(100% - 32px);
+  padding: 16px 22px;
+  border: 2px solid var(--ink);
+  background: var(--blue); color: var(--cream);
+  box-shadow: var(--shadow-ink);
+  font-weight: 700; text-align: center;
+  opacity: 0; pointer-events: none;
+  transform: translate(-50%, 40px) rotate(-3deg);
+  transition: transform .5s var(--ease-bounce), opacity .3s;
+}
+.toast.is-visible { opacity: 1; transform: translate(-50%, 0) rotate(-1deg); }
+
+/* ---------- Cursor personalizado (só mouse) ---------- */
+.cursor {
+  position: fixed; z-index: 95; top: 0; left: 0;
+  width: 18px; height: 18px; margin: -9px 0 0 -9px;
+  border-radius: 50%;
+  background: var(--paper);
+  mix-blend-mode: difference;
+  pointer-events: none;
+  transition: width .3s var(--ease-out), height .3s var(--ease-out), margin .3s var(--ease-out), opacity .3s;
+}
+.cursor.is-hovering { width: 70px; height: 70px; margin: -35px 0 0 -35px; }
+.cursor.is-hidden { opacity: 0; }
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 760px) {
+  :root { --header-h: 64px; }
+  .menu-toggle { display: inline-flex; }
+  /* backdrop-filter "prenderia" o menu fixo dentro do header; no celular, desligamos */
+  .site-header.is-scrolled { backdrop-filter: none; background: var(--pink); }
+  .site-header > .wordmark { position: absolute; left: 50%; font-size: 23px; transform: translateX(-50%); }
+  .site-nav {
+    position: fixed; z-index: -1; top: 0; right: 0; left: 0;
+    flex-direction: column; align-items: flex-start; gap: 6px;
+    height: 100dvh; padding: 110px 7% 40px;
+    background: var(--pink);
+    clip-path: circle(0% at 30px 30px);
+    transition: clip-path .7s var(--ease-out);
+  }
+  .site-nav.is-open { clip-path: circle(150% at 30px 30px); }
+  .site-nav a { font: 700 clamp(44px, 13vw, 72px)/1.1 var(--display); letter-spacing: -.05em; text-transform: uppercase; }
+  .site-nav a::after { bottom: 4px; height: 5px; }
+  .site-announcement { font-size: 12px; }
+  .site-announcement a { display: none; }
+  .footer-row { flex-direction: column; align-items: start; }
+}

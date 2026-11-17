@@ -1,3 +1,5 @@
+import { formatPrice } from "../utils/format.js";
+
 export class Product {
   constructor({ slug, name, category, description, price, image, alt, badge = "", featured = false }) {
     if (!slug || !name || !category || !image || !Number.isFinite(price)) {
@@ -8,6 +10,10 @@ export class Product {
   }
 
   get formattedPrice() {
-    return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }).format(this.price);
+    return formatPrice(this.price);
+  }
+
+  get url() {
+    return `produto.html?item=${encodeURIComponent(this.slug)}`;
   }
 }

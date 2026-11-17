@@ -15,13 +15,14 @@ export class FavoritesService {
     return this.#slugs.has(slug);
   }
 
+  /** Liga/desliga o favorito e devolve o novo estado (true = favoritado). */
   toggle(slug) {
     if (this.has(slug)) this.#slugs.delete(slug);
     else this.#slugs.add(slug);
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify([...this.#slugs]));
     } catch {
-      // Favorites stay available until the current page is closed.
+      // Sem localStorage, os favoritos valem até fechar a página.
     }
     return this.has(slug);
   }

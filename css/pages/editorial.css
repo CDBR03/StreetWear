@@ -1,0 +1,89 @@
+/* =========================================================
+   LOOKBOOK (lookbook.html) e SOBRE (sobre.html)
+   As duas páginas são "editoriais", então dividem o arquivo.
+   ========================================================= */
+
+/* ---------- Lookbook ---------- */
+.lookbook-intro { padding: 90px var(--gutter) 70px; background: var(--pink); }
+.lookbook-intro .display em { color: var(--cream); }
+.lookbook-intro .lede { margin-top: 26px; }
+
+.lookbook-grid {
+  display: grid; grid-template-columns: 1.1fr .9fr; grid-template-rows: 460px 460px 560px; gap: 22px;
+  padding: 80px var(--gutter) 110px;
+}
+.lookbook-item { position: relative; margin: 0; overflow: hidden; border: 2px solid var(--ink); background: var(--blue); }
+.lookbook-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s var(--ease-out), filter .6s; }
+.lookbook-item:hover img { transform: scale(1.08); filter: contrast(1.1) saturate(1.2); }
+.lookbook-tall { grid-row: span 2; }
+.lookbook-wide { grid-column: 1 / -1; }
+.lookbook-item figcaption {
+  position: absolute; right: 0; bottom: 0; left: 0;
+  display: grid; gap: 8px; padding: 60px 26px 24px;
+  background: linear-gradient(transparent, #17161bdd);
+  color: var(--paper);
+  transform: translateY(30px); transition: transform .6s var(--ease-out);
+}
+.lookbook-item:hover figcaption { transform: none; }
+.lookbook-item figcaption span { font-size: 12px; font-weight: 800; letter-spacing: .16em; color: var(--pink); }
+.lookbook-item figcaption b { font: 700 clamp(26px, 3vw, 44px)/1 var(--display); letter-spacing: -.04em; }
+
+.lookbook-cta { padding: 110px var(--gutter); border-top: 2px solid var(--ink); background: var(--cream); text-align: center; }
+.lookbook-cta .display { margin: 0 0 40px; }
+.lookbook-cta .eyebrow { justify-content: center; }
+
+/* ---------- Sobre ---------- */
+.about-hero {
+  display: grid; grid-template-columns: 1fr .85fr; align-items: center; gap: 6vw;
+  padding: 90px var(--gutter);
+  background: var(--pink);
+}
+.about-hero .display em { color: var(--cream); }
+.about-hero .lede { margin-top: 26px; }
+.about-hero figure { position: relative; height: 560px; margin: 0; }
+.about-hero figure > .reveal-clip { height: 100%; overflow: hidden; border: 2px solid var(--ink); box-shadow: 14px 14px 0 var(--cream); }
+.about-hero img { width: 100%; height: 115%; object-fit: cover; object-position: center 25%; transform: translateY(var(--parallax, 0px)); }
+.about-hero .sticker { bottom: -40px; left: -50px; }
+
+.about-statement { padding: 120px var(--gutter); background: var(--cream); text-align: center; }
+.about-statement .eyebrow { justify-content: center; }
+.about-statement .title { margin: 0 0 34px; }
+.about-statement > p:not(.eyebrow) { max-width: 680px; margin: 0 auto 18px; font-size: 19px; }
+.about-statement .text-link { display: inline-block; margin-top: 20px; }
+
+.about-values { display: grid; grid-template-columns: repeat(3, 1fr); border-block: 2px solid var(--ink); }
+.about-values article {
+  padding: 50px 6%;
+  border-right: 2px solid var(--ink);
+  background: var(--paper);
+  transition: background .4s, color .4s;
+}
+.about-values article:last-child { border-right: 0; }
+.about-values article:hover { background: var(--blue); color: var(--cream); }
+.about-values span { color: var(--pink); font: 700 64px/1 var(--display); }
+.about-values h3 { margin: 18px 0 8px; font: 700 30px var(--display); letter-spacing: -.03em; }
+.about-values p { margin: 0; font-size: 16px; opacity: .8; }
+
+.about-image { position: relative; height: 640px; overflow: hidden; }
+.about-image img { width: 100%; height: 120%; object-fit: cover; object-position: center 35%; transform: translateY(var(--parallax, 0px)); }
+.about-image p {
+  position: absolute; bottom: 40px; left: var(--gutter);
+  margin: 0;
+  padding: 10px 18px;
+  background: var(--pink);
+  border: 2px solid var(--ink);
+  font: 700 clamp(30px, 5vw, 70px)/1 var(--display); letter-spacing: -.05em;
+  rotate: -2deg;
+}
+
+@media (max-width: 860px) {
+  .about-hero { grid-template-columns: 1fr; }
+  .about-hero figure { height: 440px; margin-right: 14px; }
+  .about-values { grid-template-columns: 1fr; }
+  .about-values article { border-right: 0; border-bottom: 2px solid var(--ink); }
+  .about-values article:last-child { border-bottom: 0; }
+  .about-image { height: 440px; }
+  .lookbook-grid { grid-template-columns: 1fr; grid-template-rows: none; grid-auto-rows: 420px; }
+  .lookbook-tall, .lookbook-wide { grid-row: auto; grid-column: auto; }
+  .lookbook-item figcaption { transform: none; }
+}

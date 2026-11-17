@@ -1,0 +1,68 @@
+/* =========================================================
+   LOJA (loja.html)
+   ========================================================= */
+.page-intro {
+  position: relative;
+  display: grid; grid-template-columns: 1fr .8fr; align-items: center; gap: 6vw;
+  padding: 80px var(--gutter);
+  overflow: hidden;
+  background: var(--pink);
+}
+.page-intro .display em { color: var(--cream); }
+.page-intro .lede { margin-top: 26px; }
+.page-intro figure { position: relative; height: 440px; margin: 0; }
+.page-intro figure > .reveal-clip { height: 100%; overflow: hidden; border: 2px solid var(--ink); box-shadow: 14px 14px 0 var(--cream); }
+.page-intro figure img { width: 100%; height: 115%; object-fit: cover; object-position: center 30%; transform: translateY(var(--parallax, 0px)); }
+.page-intro .sticker { bottom: -30px; left: -40px; }
+
+.catalog-perks { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
+.catalog-perks span { padding: 8px 12px; border: 2px solid var(--ink); background: var(--cream); font-size: 12px; font-weight: 800; letter-spacing: .1em; }
+
+.catalog-content { padding: 50px var(--gutter) 110px; background: var(--cream); }
+.catalog-toolbar {
+  position: sticky; z-index: 5; top: 58px;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;
+  margin: 0 0 40px; padding: 16px 0;
+  border-bottom: 2px solid var(--ink);
+  background: var(--cream);
+}
+.catalog-toolbar > p { margin: 0; font-size: 14px; font-weight: 800; letter-spacing: .12em; }
+.catalog-toolbar [data-result-count] { display: inline-block; min-width: 1.5ch; color: var(--pink-deep); font: 700 26px var(--display); vertical-align: -3px; }
+
+/* Filtros em forma de "pílulas" (botões) */
+.filter-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.filter-pills button {
+  padding: 10px 16px;
+  border: 2px solid var(--ink);
+  background: var(--paper);
+  font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+  transition: background .2s, transform .3s var(--ease-bounce), box-shadow .3s;
+}
+.filter-pills button:hover { transform: translateY(-3px); box-shadow: 3px 3px 0 var(--ink); }
+.filter-pills button[aria-pressed="true"] { background: var(--ink); color: var(--cream); }
+
+.catalog-controls label { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 800; letter-spacing: .12em; }
+.catalog-controls select { padding: 10px 14px; border: 2px solid var(--ink); background: var(--paper); font-size: 14px; }
+
+/* Quando o filtro muda, a grade "pisca" para dar vida à troca */
+.product-grid.is-updating { animation: grid-in .6s var(--ease-out); }
+@keyframes grid-in { from { opacity: 0; transform: translateY(20px); } }
+
+.empty-state { padding: 60px 0; text-align: center; font: 700 26px var(--display); }
+
+.catalog-after {
+  display: flex; align-items: center; gap: 24px;
+  padding: 40px var(--gutter);
+  background: var(--blue); color: var(--cream);
+}
+.catalog-after > span { color: var(--pink); font-size: 60px; line-height: 1; animation: spin 8s linear infinite; }
+.catalog-after > div { flex: 1; }
+.catalog-after strong { font: 700 28px var(--display); letter-spacing: -.03em; }
+.catalog-after p { margin: 4px 0 0; opacity: .8; }
+
+@media (max-width: 760px) {
+  .page-intro { grid-template-columns: 1fr; padding-block: 56px; }
+  .page-intro figure { height: 340px; margin-right: 14px; }
+  .catalog-toolbar { position: static; flex-direction: column; align-items: stretch; }
+  .catalog-after { flex-direction: column; align-items: start; }
+}

@@ -1,68 +1,55 @@
+import { el } from "../utils/dom.js";
+import { capitalize } from "../utils/format.js";
+
+const BADGE_COLORS = { "DROP LIMITADO": "blue", "NOVO": "cream" };
+
+/** Monta o cartão de um produto (foto, selo, favorito, preço). */
 export class ProductCard {
   constructor(favorites) {
     this.favorites = favorites;
   }
 
-  render(product) {
-    const article = document.createElement("article");
-    article.className = "product-card reveal";
+  render(product, index = 0) {
+    const favorite = el("button", {
+      type: "button",
+      class: "favorite-button",
+      dataset: { action: "favorite", slug: product.slug }
+    });
+    ProductCard.paintFavorite(favorite, this.favorites.has(product.slug), product.name);
 
-    const media = document.createElement("div");
-    media.className = "product-image";
-    const link = document.createElement("a");
-    link.href = `produto.html?item=${encodeURIComponent(product.slug)}`;
-    link.setAttribute("aria-label", `Ver ${product.name}`);
-    const image = document.createElement("img");
-    image.src = product.image;
-    image.alt = product.alt;
-    image.loading = "lazy";
-    image.decoding = "async";
-    link.append(image);
-    media.append(link);
+    const badge = product.badge
+      ? el("span", { class: `product-tag ${BADGE_COLORS[product.badge] ?? ""}` }, product.badge)
+      : null;
 
-    if (product.badge) {
-      const badge = document.createElement("span");
-      badge.className = `product-tag${product.badge === "DROP LIMITADO" ? " blue" : product.badge === "NOVO" ? " cream" : ""}`;
-      badge.textContent = product.badge;
-      media.append(badge);
-    }
+    return el("article", { class: "product-card reveal", style: `--i: ${index % 4}` },
+      el("div", { class: "product-image", dataset: { tilt: "" } },
+        el("a", { href: product.url, "aria-label": `Ver ${product.name}` },
+          el("img", { src: product.image, alt: product.alt, loading: "lazy", decoding: "async" })
+        ),
+        badge,
+        favorite,
+        el("button", {
+          type: "button",
+          class: "quick-add",
+          dataset: { action: "add-to-cart", slug: product.slug },
+          "aria-label": `Adicionar ${product.name} à sacola`
+        }, "ADICIONAR", el("span", { "aria-hidden": "true" }, "+"))
+      ),
+      el("div", { class: "product-info" },
+        el("div", {},
+          el("h3", {}, el("a", { href: product.url }, product.name)),
+          el("p", {}, capitalize(product.category))
+        ),
+        el("span", { class: "product-price" }, product.formattedPrice)
+      )
+    );
+  }
 
-    const favorite = document.createElement("button");
-    const isFavorite = this.favorites.has(product.slug);
-    favorite.type = "button";
-    favorite.className = `favorite-button${isFavorite ? " is-favorite" : ""}`;
-    favorite.dataset.action = "favorite";
-    favorite.dataset.slug = product.slug;
-    favorite.textContent = isFavorite ? "♥" : "♡";
-    favorite.setAttribute("aria-label", `${isFavorite ? "Remover" : "Adicionar"} ${product.name} dos favoritos`);
-    media.append(favorite);
-
-    const add = document.createElement("button");
-    add.type = "button";
-    add.className = "quick-add";
-    add.dataset.action = "add-to-cart";
-    add.dataset.slug = product.slug;
-    add.setAttribute("aria-label", `Adicionar ${product.name} à sacola`);
-    add.append(document.createTextNode("ADICIONAR À SACOLA"));
-    const plus = document.createElement("span");
-    plus.textContent = "+";
-    add.append(plus);
-    media.append(add);
-    article.append(media);
-
-    const info = document.createElement("div");
-    info.className = "product-info";
-    const copy = document.createElement("div");
-    const title = document.createElement("h3");
-    title.textContent = product.name;
-    const description = document.createElement("p");
-    description.textContent = product.category[0].toUpperCase() + product.category.slice(1);
-    copy.append(title, description);
-    const price = document.createElement("span");
-    price.className = "product-price";
-    price.textContent = product.formattedPrice;
-    info.append(copy, price);
-    article.append(info);
-    return article;
+  /** Pinta o coração cheio/vazio. É "static" porque não depende de um cartão específico. */
+  static paintFavorite(button, active, productName) {
+    button.classList.toggle("is-favorite", active);
+    button.textContent = active ? "♥" : "♡";
+    button.setAttribute("aria-pressed", String(active));
+    button.setAttribute("aria-label", `${active ? "Remover" : "Adicionar"} ${productName} ${active ? "dos" : "aos"} favoritos`);
   }
 }

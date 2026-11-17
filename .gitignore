@@ -1,0 +1,5 @@
+# Backup local da versão anterior (o histórico do git já guarda ela)
+_versao-original/
+
+# Configuração pessoal do VS Code
+*.code-workspace
